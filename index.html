@@ -3,29 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Buscar y mostrar datos en CSV</title>
+    <title>Buscar y mostrar valor en CSV</title>
 </head>
 <body>
-    <h1>Buscar y mostrar datos en CSV</h1>
-    <label for="search-input">Buscar valor:</label>
+    <h1>Buscar y mostrar valor en CSV</h1>
+    <label for="search-input">Buscar valor en columna x:</label>
     <input type="text" id="search-input">
     <button onclick="buscarYMostrar()">Buscar</button>
     <br><br>
-    <table id="data-table" border="1">
-        <thead>
-            <tr id="header-row"></tr>
-        </thead>
-        <tbody id="data-body"></tbody>
-    </table>
+    <div id="result-container"></div>
 
     <script>
         const csvUrl = 'ICTHRJ.csv'; // Nombre del archivo CSV
-        let csvData = []; // Variable para almacenar los datos del CSV
-
-        console.log('Fetching CSV from:', csvUrl);
 
         // Función para buscar y mostrar datos
-        function buscarYMostrar() {
+        async function buscarYMostrar() {
             const searchValue = document.getElementById('search-input').value.trim().toLowerCase();
 
             if (!searchValue) {
@@ -33,73 +25,29 @@
                 return;
             }
 
-            const foundRows = csvData.filter(row => {
-                // Modificar según la estructura de tu CSV y el criterio de búsqueda
-                const cells = row.split(',');
-                // Aquí se puede especificar la columna para buscar el valor
-                const columnToSearch = 0; // Por ejemplo, buscar en la primera columna
-                return cells[columnToSearch].trim().toLowerCase() === searchValue;
-            });
-
-            mostrarEnTabla(foundRows);
-        }
-
-        // Función para mostrar resultados en la tabla
-        function mostrarEnTabla(rows) {
-            const tableHeader = document.getElementById('header-row');
-            const tableBody = document.getElementById('data-body');
-
-            // Limpiar tabla previa
-            tableBody.innerHTML = '';
-
-            rows.forEach((row, index) => {
-                const cells = row.split(',');
-                const tr = document.createElement('tr');
-
-                cells.forEach(cell => {
-                    const td = document.createElement(index === 0 ? 'th' : 'td');
-                    td.textContent = cell.trim();
-                    tr.appendChild(td);
-                });
-
-                tableBody.appendChild(tr);
-            });
-        }
-
-        // Obtener y procesar datos CSV al cargar la página
-        fetch(csvUrl)
-            .then(response => {
-                console.log('Fetch response status:', response.status); // Verifica el estado de la respuesta
+            try {
+                const response = await fetch(csvUrl);
                 if (!response.ok) {
-                    throw new Error('Network response was not ok ' + response.statusText);
-                }
-                return response.text();
-            })
-            .then(data => {
-                console.log('CSV data retrieved:', data); // Verifica que los datos se han recuperado correctamente
-
-                if (!data) {
-                    throw new Error('No data retrieved');
+                    throw new Error('No se pudo cargar el CSV');
                 }
 
-                csvData = data.split('\n').filter(row => row.trim() !== '');
-                console.log('CSV rows:', csvData); // Verifica que las filas se han dividido correctamente
+                const csvData = await response.text();
+                const lines = csvData.split('\n');
 
-                const tableHeader = document.getElementById('header-row');
-                const headerCells = csvData[0].split(',');
-                
-                headerCells.forEach(cell => {
-                    const th = document.createElement('th');
-                    th.textContent = cell.trim();
-                    tableHeader.appendChild(th);
-                });
+                for (let line of lines) {
+                    const [x, y] = line.split(',');
+                    if (x.trim().toLowerCase() === searchValue) {
+                        document.getElementById('result-container').textContent = `El valor de 'y' para 'x = ${x.trim()}' es: ${y.trim()}`;
+                        return;
+                    }
+                }
 
-                console.log('Table constructed successfully');
-            })
-            .catch(error => {
+                document.getElementById('result-container').textContent = `No se encontró ningún resultado para 'x = ${searchValue}'`;
+            } catch (error) {
                 console.error('Error al leer el CSV:', error);
-                document.body.insertAdjacentHTML('beforeend', `<p style="color: red;">Error al leer el CSV: ${error.message}</p>`);
-            });
+                document.getElementById('result-container').textContent = `Error: ${error.message}`;
+            }
+        }
     </script>
 </body>
 </html>
