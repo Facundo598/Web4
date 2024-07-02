@@ -17,9 +17,11 @@
     <script>
         const csvUrl = 'https://drive.google.com/uc?export=download&id=1xXosIPvLbfHej19U50Mvc1slz4jM11kq';
 
+        console.log('Fetching CSV from:', csvUrl);
+
         fetch(csvUrl)
             .then(response => {
-                console.log('Fetch response:', response);
+                console.log('Fetch response status:', response.status); // Verifica el estado de la respuesta
                 if (!response.ok) {
                     throw new Error('Network response was not ok ' + response.statusText);
                 }
@@ -27,13 +29,21 @@
             })
             .then(data => {
                 console.log('CSV data retrieved:', data); // Verifica que los datos se han recuperado correctamente
+
+                if (!data) {
+                    throw new Error('No data retrieved');
+                }
+
                 const rows = data.split('\n').filter(row => row.trim() !== '');
                 console.log('CSV rows:', rows); // Verifica que las filas se han dividido correctamente
+
                 const tableHeader = document.getElementById('header-row');
                 const tableBody = document.getElementById('data-body');
 
                 rows.forEach((row, index) => {
                     const cells = row.split(',');
+                    console.log(`Row ${index} cells:`, cells); // Verifica las celdas de cada fila
+
                     const tr = document.createElement('tr');
 
                     cells.forEach(cell => {
@@ -51,7 +61,10 @@
 
                 console.log('Table constructed successfully');
             })
-            .catch(error => console.error('Error al leer el CSV:', error));
+            .catch(error => {
+                console.error('Error al leer el CSV:', error);
+                document.body.insertAdjacentHTML('beforeend', `<p style="color: red;">Error al leer el CSV: ${error.message}</p>`);
+            });
     </script>
 </body>
 </html>
