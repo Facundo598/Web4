@@ -19,6 +19,7 @@
 
         fetch(csvUrl)
             .then(response => {
+                console.log('Fetch response:', response);
                 if (!response.ok) {
                     throw new Error('Network response was not ok ' + response.statusText);
                 }
@@ -27,6 +28,7 @@
             .then(data => {
                 console.log('CSV data retrieved:', data); // Verifica que los datos se han recuperado correctamente
                 const rows = data.split('\n').filter(row => row.trim() !== '');
+                console.log('CSV rows:', rows); // Verifica que las filas se han dividido correctamente
                 const tableHeader = document.getElementById('header-row');
                 const tableBody = document.getElementById('data-body');
 
@@ -46,10 +48,10 @@
                         tableBody.appendChild(tr);
                     }
                 });
+
+                console.log('Table constructed successfully');
             })
             .catch(error => console.error('Error al leer el CSV:', error));
     </script>
 </body>
 </html>
-
-
