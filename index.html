@@ -18,7 +18,7 @@
 
         // Función para buscar y mostrar datos
         async function buscarYMostrar() {
-            const searchValue = document.getElementById('search-input').value.trim().toLowerCase();
+            const searchValue = document.getElementById('search-input').value.trim();
 
             try {
                 const response = await fetch(csv);
@@ -28,12 +28,19 @@
                 if (searchValue) {
                     for (let line of lines) {
                         const [x, y] = line.split(',');
-                        if (x.trim().toLowerCase() === searchValue) {
+                        if (x.trim() === searchValue) {
                             document.getElementById('result-container').textContent = `El valor de 'y' para 'x = ${x.trim()}' es: ${y.trim()}`;
-                            return;}}
-                    document.getElementById('result-container').textContent = `No se encontró ningún resultado para 'x = ${searchValue}'`;}
-                else {
-                    document.getElementById('result-container').textContent = 'Por favor ingresa un valor para buscar.';}}
+                            return;
+                        }
+                    }
+                    document.getElementById('result-container').textContent = `No se encontró ningún resultado para 'x = ${searchValue}'`;
+                } else {
+                    document.getElementById('result-container').textContent = 'Por favor ingresa un valor para buscar.';
+                }
+            } catch (error) {
+                console.error('Error al leer el CSV:', error);
+                document.getElementById('result-container').textContent = `Error: ${error.message}`;
+            }
         }
     </script>
 </body>
