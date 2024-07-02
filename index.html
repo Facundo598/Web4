@@ -14,40 +14,28 @@
     <div id="result-container"></div>
 
     <script>
-        const csvUrl = 'ICTHRJ.csv'; // Nombre del archivo CSV
+        const csv = 'ICTHRJ.csv'; // Nombre del archivo CSV
 
         // Función para buscar y mostrar datos
         async function buscarYMostrar() {
             const searchValue = document.getElementById('search-input').value.trim().toLowerCase();
 
-            if (!searchValue) {
-                alert('Por favor ingresa un valor para buscar.');
-                return;
-            }
-
             try {
-                const response = await fetch(csvUrl);
-                if (!response.ok) {
-                    throw new Error('No se pudo cargar el CSV');
-                }
-
+                const response = await fetch(csv);
                 const csvData = await response.text();
                 const lines = csvData.split('\n');
 
-                for (let line of lines) {
-                    const [x, y] = line.split(',');
-                    if (x.trim().toLowerCase() === searchValue) {
-                        document.getElementById('result-container').textContent = `El valor de 'y' para 'x = ${x.trim()}' es: ${y.trim()}`;
-                        return;
-                    }
-                }
-
-                document.getElementById('result-container').textContent = `No se encontró ningún resultado para 'x = ${searchValue}'`;
-            } catch (error) {
-                console.error('Error al leer el CSV:', error);
-                document.getElementById('result-container').textContent = `Error: ${error.message}`;
-            }
+                if (searchValue) {
+                    for (let line of lines) {
+                        const [x, y] = line.split(',');
+                        if (x.trim().toLowerCase() === searchValue) {
+                            document.getElementById('result-container').textContent = `El valor de 'y' para 'x = ${x.trim()}' es: ${y.trim()}`;
+                            return;}}
+                    document.getElementById('result-container').textContent = `No se encontró ningún resultado para 'x = ${searchValue}'`;}
+                else {
+                    document.getElementById('result-container').textContent = 'Por favor ingresa un valor para buscar.';}}
         }
     </script>
 </body>
 </html>
+
