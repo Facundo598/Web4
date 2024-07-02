@@ -18,9 +18,15 @@
         const csvUrl = 'https://drive.google.com/uc?export=download&id=1xXosIPvLbfHej19U50Mvc1slz4jM11kq';
 
         fetch(csvUrl)
-            .then(response => response.text())
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok ' + response.statusText);
+                }
+                return response.text();
+            })
             .then(data => {
-                const rows = data.split('\n');
+                console.log('CSV data retrieved:', data); // Verifica que los datos se han recuperado correctamente
+                const rows = data.split('\n').filter(row => row.trim() !== '');
                 const tableHeader = document.getElementById('header-row');
                 const tableBody = document.getElementById('data-body');
 
@@ -30,7 +36,7 @@
 
                     cells.forEach(cell => {
                         const td = document.createElement(index === 0 ? 'th' : 'td');
-                        td.textContent = cell;
+                        td.textContent = cell.trim();
                         tr.appendChild(td);
                     });
 
@@ -45,4 +51,5 @@
     </script>
 </body>
 </html>
+
 
