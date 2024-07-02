@@ -7,7 +7,7 @@
 </head>
 <body>
     <h1>Buscar y mostrar valor en CSV</h1>
-    <label for="search-input">Buscar valor en columna x:</label>
+    <label for="search-input">Buscar valor aproximado en columna x:</label>
     <input type="text" id="search-input">
     <button onclick="buscarYMostrar()">Buscar</button>
     <br><br>
@@ -25,14 +25,17 @@
             const lines = csvData.split('\n');
 
             if (searchValue) {
+                // Construye una expresión regular para buscar aproximaciones
+                const regex = new RegExp(searchValue.replace(/\*/g, '\\d*'), 'i');
+
                 for (let line of lines) {
                     const [x, y] = line.split(',');
-                    if (x.trim() === searchValue) {
-                        document.getElementById('result-container').textContent = `El valor de 'y' para 'x = ${x.trim()}' es: ${y.trim()}`;
+                    if (regex.test(x.trim())) {
+                        document.getElementById('result-container').textContent = `Se encontró un valor aproximado para 'x = ${x.trim()}' con 'y = ${y.trim()}'`;
                         return;
                     }
                 }
-                document.getElementById('result-container').textContent = `No se encontró ningún resultado para 'x = ${searchValue}'`;
+                document.getElementById('result-container').textContent = `No se encontró ningún resultado aproximado para 'x = ${searchValue}'`;
             } else {
                 document.getElementById('result-container').textContent = 'Por favor ingresa un valor para buscar.';
             }
@@ -40,3 +43,4 @@
     </script>
 </body>
 </html>
+
