@@ -20,29 +20,23 @@
         async function buscarYMostrar() {
             const searchValue = document.getElementById('search-input').value.trim();
 
-            try {
-                const response = await fetch(csv);
-                const csvData = await response.text();
-                const lines = csvData.split('\n');
+            const response = await fetch(csv);
+            const csvData = await response.text();
+            const lines = csvData.split('\n');
 
-                if (searchValue) {
-                    for (let line of lines) {
-                        const [x, y] = line.split(',');
-                        if (x.trim() === searchValue) {
-                            document.getElementById('result-container').textContent = `El valor de 'y' para 'x = ${x.trim()}' es: ${y.trim()}`;
-                            return;
-                        }
+            if (searchValue) {
+                for (let line of lines) {
+                    const [x, y] = line.split(',');
+                    if (x.trim() === searchValue) {
+                        document.getElementById('result-container').textContent = `El valor de 'y' para 'x = ${x.trim()}' es: ${y.trim()}`;
+                        return;
                     }
-                    document.getElementById('result-container').textContent = `No se encontró ningún resultado para 'x = ${searchValue}'`;
-                } else {
-                    document.getElementById('result-container').textContent = 'Por favor ingresa un valor para buscar.';
                 }
-            } catch (error) {
-                console.error('Error al leer el CSV:', error);
-                document.getElementById('result-container').textContent = `Error: ${error.message}`;
+                document.getElementById('result-container').textContent = `No se encontró ningún resultado para 'x = ${searchValue}'`;
+            } else {
+                document.getElementById('result-container').textContent = 'Por favor ingresa un valor para buscar.';
             }
         }
     </script>
 </body>
 </html>
-
