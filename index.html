@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadoras</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        background-color: #f9f9f9;
+            padding: 20px;
+        }
+
+        .container {
+            width: 80%;
+            background: lightblue;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .info-container {
+            background: #E3E4E5;
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 800px;
+        }
+
+        .container h1 {
+      text-align: center;
+    }
+    .input-group {
+      margin-bottom: 15px;
+    }
+    .input-group label {
+      display: block;
+      margin-bottom: 5px;
+    }
+    .input-group input {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    .results {
+      margin-top: 20px;
+      background: #fff;
+      padding: 15px;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+    .results p {
+      margin: 5px 0;
+    }
+    button {
+      background-color: #007BFF;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 4px;
+      cursor: pointer;
+      width: 100%;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    .table-container {
+      margin: 20px 0;
+      background: #fff;
+      padding: 10px;
+      border-radius: 4px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    table, th, td {
+      border: 1px solid #ccc;
+    }
+    th, td {
+      text-align: center;
+      padding: 8px;
+    }
+    th {
+      background-color: #f2f2f2;
+    }
+
+  </style>
+</head>
+<body>
+    <div class="info-container" style="text-align: center;background: lightblue">
+      <h1>Cálculo de Caudal y Velocidad</h1>
+ 	</div>
+  
+  
+  		<div class="info-container">
+    <h2>Consideraciones para el Cálculo Teórico del Caudal:</h2>
+    <p>
+      El cálculo teórico del caudal se basa en condiciones ideales, sin considerar factores adicionales como la altura de elevación o las pérdidas en la infraestructura. Sin embargo, en la práctica, varios factores afectan el rendimiento real:
+    </p>
+    <ul>
+      <li><strong>Altura de elevación:</strong> No se considera la diferencia de altura entre la bomba y el punto de descarga.</li>
+      <li><strong>Pérdidas por fricción:</strong> Las cañerías y accesorios generan resistencia que reduce el caudal.</li>
+      <li><strong>Curva de la bomba:</strong> La bomba tiene un límite de caudal que depende de la presión.</li>
+      <li><strong>Eficiencia de la bomba:</strong> La bomba no es 100% eficiente, afectando el caudal final.</li>
+      <li><strong>Condiciones de operación:</strong> Factores como el tipo de fluido influyen en el rendimiento.</li>
+    </ul>
+    <p>Para obtener una estimación más precisa, es clave considerar el caudal máximo que puede mover la bomba, ya que este valor tiene en cuenta las limitaciones reales del sistema.</p>
+  </div>
+  
+  <div class="info-container">
+    <h3>Impacto del Cambio de Diámetro en Caudal y Presión:</h3>
+    <p>Cuando el diámetro de una cañería cambia, el caudal y la presión se ven afectados de la siguiente manera</p>
+    <ul>
+      <li><strong>Si el diámetro aumenta:</strong></li>
+      <ul>
+        <li><strong>Caudal:</strong> Se mantiene constante, pero la velocidad del fluido disminuye.</li>
+        <li><strong>Presión:</strong> Puede disminuir ligeramente debido a menores pérdidas por fricción.</li>
+      </ul>
+      <li><strong>Si el diámetro disminuye:</strong></li>
+      <ul>
+        <li><strong>Caudal:</strong> Se mantiene constante, pero la velocidad del fluido aumenta.</li>
+        <li><strong>Presión:</strong> Puede disminuir debido a mayores pérdidas por fricción.</li>
+      </ul>
+    </ul>
+    <p>En resumen, los cambios en el diámetro afectan la velocidad del fluido y las pérdidas por fricción, lo que a su vez influye en la presión del sistema.</p>
+  </div>
+  
+  
+    <div class="container">
+    
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr><th>Pulgadas</th><th>Diámetro (mm)</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>1</td><td>25.4</td></tr>
+          <tr><td>2</td><td>50.8</td></tr>
+          <tr><td>3</td><td>76.2</td></tr>
+          <tr><td>4</td><td>101.6</td></tr>
+          <tr><td>5</td><td>127</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="input-group">
+      <label for="diameter">Diámetro de la cañería (mm):</label>
+      <input type="number" id="diameter" placeholder="Ej. 76.2">
+    </div>
+    <div class="input-group">
+      <label for="density">Densidad del fluido (kg/m³):</label>
+      <input type="number" id="density" placeholder="Ej. 1000">
+    </div>
+    <div class="input-group">
+      <label for="pressure">Presión (bar):</label>
+      <input type="number" id="pressure" placeholder="Ej. 2">
+    </div>
+    <button onclick="calculateResults()">Calcular</button>
+
+    <div class="results" id="results" style="display: none;">
+      <h3>Resultados:</h3>
+      <p><strong>Área de la cañería:</strong> <span id="area"></span> m²</p>
+      <p><strong>Presión en Pascal:</strong> <span id="pressurePa"></span> Pa</p>
+      <p><strong>Velocidad del fluido:</strong> <span id="velocity"></span> m/s</p>
+      <p><strong>Caudal volumétrico:</strong> <span id="flowrate"></span> m³/min</p>
+      <p><strong>Caudal en m³/h:</strong> <span id="flowrateMin"></span> m³/h</p>
+      <hr>
+      <h4>Fórmulas aplicadas:</h4>
+      <p>Área: A = π × (D/2)²</p>
+      <p>Presión en Pascal: P (Pa) = P (bar) × 10⁵</p>
+      <p>Velocidad: v = √(2 × P / ρ)</p>
+      <p>Caudal: Q = v × A</p>
+    </div>
+  </div>
+
+  <script>
+    function calculateResults() {
+      const diameter = parseFloat(document.getElementById('diameter').value) / 1000; // Convert mm to m
+      const density = parseFloat(document.getElementById('density').value);
+      const pressureBar = parseFloat(document.getElementById('pressure').value);
+
+      if (!diameter || !density || !pressureBar) {
+        alert('Por favor, ingrese todos los valores.');
+        return;
+      }
+
+      // Fórmulas
+      const area = Math.PI * Math.pow(diameter / 2, 2); // Área en m²
+      const pressurePa = pressureBar * 1e5; // Convertir bar a Pascal
+      const velocity = Math.sqrt((2 * pressurePa) / density); // Velocidad en m/s
+      const flowrate = velocity * area * 60; // Caudal en m³/min
+      const flowrateMin = flowrate * 60; // Convertir caudal a m³/h
+
+      // Mostrar resultadh
+      document.getElementById('area').textContent = area.toFixed(5);
+      document.getElementById('pressurePa').textContent = pressurePa.toLocaleString();
+      document.getElementById('velocity').textContent = velocity.toFixed(2);
+      document.getElementById('flowrate').textContent = flowrate.toFixed(5);
+      document.getElementById('flowrateMin').textContent = flowrateMin.toFixed(2);
+
+      // Mostrar resultados
+      document.getElementById('results').style.display = 'block';
+    }
+  </script>
+</body>
+</html>
